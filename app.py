@@ -1,8 +1,8 @@
-from os import set_blocking
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QFontDatabase, QFont, QIcon
 from GUI.setup import *
+from PianoTiles.game import Game
 
 
 class App(object):
@@ -14,9 +14,9 @@ class App(object):
         self.difficultyLevels = ['Easy', 'Middle', 'Hard']
         self.currDifficulty   = 0
 
-        self.levelsTitles     = ['OPCJA 1', 'OPCJA 2', 'OPCJA 3']
+        self.levelsTitles     = ['you\'ve_got_a_friend_in_me']
 
-        self.ledColors        = ['White', 'Blue', 'Red', 'Green', 'RAINBOW MODE']
+        self.ledColors        = ['White', 'Blue', 'Red', 'Green', 'Yellow', 'Magenta', 'Cyan', 'RAINBOW MODE']
         self.currLedColor     = 0
 
         self.setupMainWindow()
@@ -73,7 +73,6 @@ class App(object):
         self.screen.playButton.clicked.connect(
             lambda: self.play(self.screen.chooseLevelBox.currentText())
         )
-        
 
     def ranking(self) -> None:  
         self.loadScreen(f'{UI_FOLDER_PATH}/{UI_RANKING}')
@@ -106,6 +105,7 @@ class App(object):
     def play(self, selectedLevel) -> None:
         print(f'Chosen level: {self.difficultyLevels[self.currDifficulty]} {selectedLevel}')
         print(f'Led color: {self.ledColors[self.currLedColor]}')
+        Game(selectedLevel, self.difficultyLevels[self.currDifficulty], self.ledColors[self.currLedColor]).play()
 
     def quit(self) -> None:
         self.window.close()
