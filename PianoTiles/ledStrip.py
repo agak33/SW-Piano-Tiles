@@ -15,6 +15,7 @@ class LedStrip(object):
         self.color           = color
         self.pinNumber       = pin
         self.ledNumsColor    = []
+        self.soundPlayed     = False
 
     def __eq__(self, other: int):
         return self.pinNumber == other
@@ -29,11 +30,21 @@ class LedStrip(object):
             if      (self.ledNumTop     <= newLedNum.number <= self.ledNumBottom) or \
                     (self.ledNumBottom  <= newLedNum.number <= self.ledNumTop):
                 ledNumsColor.append(newLedNum)
+        self.soundPlayed = False
         self.ledNumsColor = ledNumsColor
 
-    def playSound(self):
+    def playSound(self) -> None:
         if self.ledNumBottom in self.ledNumsColor:
             self.note.play()
+            self.soundPlayed = True
             time.sleep(0.25)
+
+    def check(self):
+        return self.ledNumBottom in self.ledNumsColor
+
+    def gameOver(self) -> bool:
+        if self.ledNumBottom in self.ledNumsColor and not self.soundPlayed:
+            return True
+        return False
 
 

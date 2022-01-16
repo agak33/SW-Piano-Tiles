@@ -5,6 +5,7 @@ UI_MAIN_MENU   = 'mainMenu.ui'
 UI_START_GAME  = 'chooseLevel.ui'
 UI_RANKING     = 'ranking.ui'
 UI_SETTINGS    = 'settings.ui'
+UI_GAMEOVER    = 'gameOver.ui'
 
 SIZE_WIDTH  = 700
 SIZE_HEIGHT = 744

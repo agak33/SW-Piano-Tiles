@@ -41,8 +41,8 @@
    </property>
    <property name="font">
     <font>
-     <family>Patrick Hand SC</family>
-     <pointsize>20</pointsize>
+     <family>MS Shell Dlg 2</family>
+     <pointsize>26</pointsize>
     </font>
    </property>
    <property name="text">
@@ -57,8 +57,8 @@
     <rect>
      <x>10</x>
      <y>130</y>
-     <width>681</width>
-     <height>481</height>
+     <width>680</width>
+     <height>480</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -69,43 +69,55 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>679</width>
-      <height>479</height>
+      <width>678</width>
+      <height>478</height>
      </rect>
     </property>
-    <widget class="QTableView" name="rankingTable">
+    <widget class="QTableWidget" name="rankingTable">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>681</width>
-       <height>481</height>
+       <width>680</width>
+       <height>480</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <family>Patrick Hand SC</family>
-       <pointsize>13</pointsize>
-      </font>
+     <property name="columnCount">
+      <number>3</number>
      </property>
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
-     </property>
-     <property name="tabKeyNavigation">
+     <attribute name="horizontalHeaderVisible">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="horizontalHeaderCascadingSectionResizes">
       <bool>false</bool>
-     </property>
-     <property name="selectionBehavior">
-      <enum>QAbstractItemView::SelectRows</enum>
-     </property>
+     </attribute>
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>100</number>
+     </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>100</number>
+     </attribute>
+     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderCascadingSectionResizes">
+      <bool>true</bool>
+     </attribute>
+     <column/>
+     <column/>
+     <column/>
     </widget>
    </widget>
   </widget>
   <widget class="QPushButton" name="mainMenuButton">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>150</x>
      <y>630</y>
-     <width>331</width>
+     <width>400</width>
      <height>51</height>
     </rect>
    </property>

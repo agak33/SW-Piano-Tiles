@@ -1,10 +1,11 @@
 from PianoTiles.ledStrip import LedStrip
-import serial
+from typing import Union
+# import serial
 import sqlite3
 import pygame as pg
 import time
-import board
-import RPi.GPIO as GPIO
+# import board
+# import RPi.GPIO as GPIO
 
 SONGS_FOLDER = 'PianoTiles/songs'
 FILE_EXTENSION = 'txt'
@@ -18,6 +19,12 @@ iterationTime = {
     'Hard'  : 0.75
 }
 
+pointsPerIteration = {
+    'Easy'  : 1,
+    'Middle': 2,
+    'Hard'  : 3
+}
+
 
 class Game(object):
     def __init__(self, level: str, difficulty: str, color: str) -> None:
@@ -28,7 +35,7 @@ class Game(object):
         self.points     = 0
         self.buttonPins = (18, 23, 24, 25, 12, 16, 20, 21)
         self.ledStrips  = []
-        self.ser        = serial.Serial(port="/dev/ttyACM0", baudrate=9600)
+        # self.ser        = serial.Serial(port="/dev/ttyACM0", baudrate=9600)
         self.setup()
 
     def setup(self) -> None:
@@ -36,8 +43,8 @@ class Game(object):
         pg.init()
 
         for btn in self.buttonPins:
-            GPIO.setup(btn, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-            GPIO.add_event_detect(channel=btn, egde=GPIO.RISING, callback=self.buttonCallback)
+            # GPIO.setup(btn, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+            # GPIO.add_event_detect(channel=btn, egde=GPIO.RISING, callback=self.buttonCallback)
             pass
 
         self.ledStrips.append(
@@ -57,36 +64,67 @@ class Game(object):
         self.ledStrips.append(
             LedStrip(ledNumTop=39, ledCount=LED_PER_STRIP, direction= -1, note='C5', color=self.color, pin=21))
 
-    def play(self) -> None:
-        for note in self.level:
-            note = note.strip()
-            startTime = time.time()
-            for index in range(len(self.ledStrips)):
-                self.ledStrips[index].updateLedNumsColor()
-                if self.ledStrips[index].noteName == note:
-                    self.ledStrips[index].newLed()
+    def iteration(self, newNote: Union[str, None] = None):
+        startTime = time.time()
+        for index in range(len(self.ledStrips)):
+            self.ledStrips[index].updateLedNumsColor()
+            if self.ledStrips[index].noteName == newNote:
+                self.ledStrips[index].newLed()
 
-                for led in self.ledStrips[index].ledNumsColor:
-                    self.ser.write(f'{str(led.number).zfill(3)} '
-                                   f'{str(led.color[0]).zfill(3)} '
-                                   f'{str(led.color[1]).zfill(3)} '
-                                   f'{str(led.color[2]).zfill(3)} \n'.encode('utf-8'))
-                    # print(f'{str(led.number).zfill(3)} '
-                    #       f'{str(led.color[0]).zfill(3)} '
-                    #       f'{str(led.color[1]).zfill(3)} '
-                    #       f'{str(led.color[2]).zfill(3)} \n'.encode('utf-8'))
-            # self.buttonCallback(18)
-            # self.buttonCallback(23)
-            # self.buttonCallback(24)
-            # self.buttonCallback(25)
-            # self.buttonCallback(12)
-            # self.buttonCallback(16)
-            # self.buttonCallback(20)
-            # self.buttonCallback(21)
-            time.sleep(self.time - (time.time() - startTime))
+            for led in self.ledStrips[index].ledNumsColor:
+                # self.ser.write(f'{str(led.number).zfill(3)} '
+                #                f'{str(led.color[0]).zfill(3)} '
+                #                f'{str(led.color[1]).zfill(3)} '
+                #                f'{str(led.color[2]).zfill(3)} \n'.encode('utf-8'))
+                print(f'{str(led.number).zfill(3)} '
+                      f'{str(led.color[0]).zfill(3)} '
+                      f'{str(led.color[1]).zfill(3)} '
+                      f'{str(led.color[2]).zfill(3)} \n'.encode('utf-8'))
+
+        self.buttonCallback(18)
+        self.buttonCallback(23)
+        self.buttonCallback(24)
+        self.buttonCallback(25)
+        self.buttonCallback(12)
+        self.buttonCallback(16)
+        self.buttonCallback(20)
+        self.buttonCallback(21)
+        time.sleep(self.time - (time.time() - startTime))
+
+    def gameOver(self) -> bool:
+        for strip in self.ledStrips:
+            if strip.gameOver():
+                return True
+        return False
+
+    def addPoints(self) -> bool:
+        for strip in self.ledStrips:
+            if strip.check():
+                return True
+        return False
+
+    def play(self) -> int:
+        for note in self.level:
+            self.iteration(note.strip())
+            if self.gameOver():
+                pg.mixer.Sound('PianoTiles/sounds/boo.wav').play()
+                return self.points
+            elif self.addPoints():
+                self.points += pointsPerIteration[self.difficulty]
+
+        for _ in range(LED_PER_STRIP):
+            self.iteration()
+            if self.gameOver():
+                pg.mixer.Sound('PianoTiles/sounds/boo.wav').play()
+                return self.points
+            elif self.addPoints():
+                self.points += pointsPerIteration[self.difficulty]
+
+        pg.mixer.Sound('PianoTiles/sounds/applause.wav').play()
+        return self.points
 
     def buttonCallback(self, channel: int) -> None:
-        self.ledStrips[ self.ledStrips.index(channel) ].playSound()
+        self.ledStrips[self.ledStrips.index(channel)].playSound()
 
 
 

@@ -42,13 +42,13 @@
      <x>10</x>
      <y>20</y>
      <width>681</width>
-     <height>111</height>
+     <height>141</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>Patrick Hand SC</family>
-     <pointsize>20</pointsize>
+     <family>MS Shell Dlg 2</family>
+     <pointsize>26</pointsize>
     </font>
    </property>
    <property name="text">
@@ -61,9 +61,9 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>20</x>
      <y>200</y>
-     <width>191</width>
+     <width>201</width>
      <height>71</height>
     </rect>
    </property>
@@ -109,9 +109,9 @@
   <widget class="QLabel" name="ledColorLabel">
    <property name="geometry">
     <rect>
-     <x>340</x>
+     <x>330</x>
      <y>200</y>
-     <width>231</width>
+     <width>251</width>
      <height>71</height>
     </rect>
    </property>
@@ -131,9 +131,9 @@
   <widget class="QPushButton" name="mainMenuButton">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>150</x>
      <y>620</y>
-     <width>321</width>
+     <width>400</width>
      <height>61</height>
     </rect>
    </property>
