@@ -41,7 +41,7 @@
    </property>
    <property name="font">
     <font>
-     <family>MS Shell Dlg 2</family>
+     <family>Showcard Gothic</family>
      <pointsize>26</pointsize>
     </font>
    </property>
@@ -123,7 +123,7 @@
    </property>
    <property name="font">
     <font>
-     <family>Patrick Hand SC</family>
+     <family>Showcard Gothic</family>
      <pointsize>15</pointsize>
     </font>
    </property>

@@ -9,8 +9,6 @@ from database.database import Database
 
 
 class App(QObject):
-    gameOverSignal = pyqtSignal()
-
     def __init__(self) -> None:
         super(App, self).__init__()
         self.app              = QtWidgets.QApplication([])
@@ -18,13 +16,12 @@ class App(QObject):
         self.window           = QtWidgets.QMainWindow()
         self.screen           = QtWidgets.QWidget()
         self.database         = Database()
-        self.gameOverSignal.connect(self.gameOver)
+        self.game             = Game()
 
         self.difficultyLevels = ['Easy', 'Middle', 'Hard']
         self.currDifficulty   = 0
 
         self.levelsTitles     = ['angry birds', 'rudolph the red nosed raindeer', 'you\'ve got a friend in me']
-        self.currLevel        = self.levelsTitles[0]
         self.points           = 0
 
         self.ledColors        = ['White', 'Blue', 'Red', 'Green', 'Yellow', 'Magenta', 'Cyan', 'RAINBOW MODE']
@@ -35,7 +32,7 @@ class App(QObject):
 
     def setupMainWindow(self) -> None:
         uic.loadUi(f'{UI_FOLDER_PATH}/{UI_MAIN_WINDOW}')
-        QFontDatabase.addApplicationFont(FONT_PATH)
+        # QFontDatabase.addApplicationFont(FONT_PATH)
         self.window.statusBar().setSizeGripEnabled(False)
         self.window.show()
         self.window.setFixedSize(QSize(SIZE_WIDTH, SIZE_HEIGHT))
@@ -62,9 +59,6 @@ class App(QObject):
             self.currDifficulty = 0
         return self.currDifficulty
 
-    def level(self, value: str) -> None:
-        self.currLevel = value
-
     def startGame(self) -> None:
         self.loadScreen(f'{UI_FOLDER_PATH}/{UI_START_GAME}')        
 
@@ -84,20 +78,21 @@ class App(QObject):
                 self.difficultyLevels[self.difficultyIndex(-1)]
             )
         )
-        self.screen.chooseLevelBox.currentTextChanged.connect(self.level)
-        self.screen.playButton.clicked.connect(self.play)
+        self.screen.playButton.clicked.connect(
+            lambda: self.play(self.screen.chooseLevelBox.currentText())
+        )
 
     def ranking(self) -> None:  
         self.loadScreen(f'{UI_FOLDER_PATH}/{UI_RANKING}')
-        self.screen.rankingTable.setHorizontalHeaderLabels(('Points', 'Song', 'Player'))
+        self.screen.rankingTable.setHorizontalHeaderLabels(('Player', 'Points', 'Song'))
         results = self.database.getRanking()
 
         self.screen.rankingTable.setRowCount(len(results))
 
         for rowNum, result in enumerate(results):
-            self.screen.rankingTable.setItem(rowNum, 0, QTableWidgetItem(f'{result[2]}'))
-            self.screen.rankingTable.setItem(rowNum, 1, QTableWidgetItem(f'{result[0]}'))
-            self.screen.rankingTable.setItem(rowNum, 2, QTableWidgetItem(f'{result[1]}'))
+            self.screen.rankingTable.setItem(rowNum, 0, QTableWidgetItem(f'{result[1]}'))
+            self.screen.rankingTable.setItem(rowNum, 1, QTableWidgetItem(f'{result[2]}'))
+            self.screen.rankingTable.setItem(rowNum, 2, QTableWidgetItem(f'{result[0]}'))
 
         self.screen.mainMenuButton.clicked.connect(self.mainMenu)
 
@@ -124,22 +119,22 @@ class App(QObject):
             lambda: self.screen.ledColorLabel.setText(self.ledColors[self.ledColorIndex(-1)])
         )
 
-    def play(self) -> None:
+    def play(self, selectedLevel: str) -> None:
         self.window.close()
-        print(f'Chosen level: {self.difficultyLevels[self.currDifficulty]} {self.currLevel}')
+        print(f'Chosen level: {self.difficultyLevels[self.currDifficulty]} {selectedLevel}')
         print(f'Led color: {self.ledColors[self.currLedColor]}')
-        game = Game(self.currLevel, self.difficultyLevels[self.currDifficulty], self.ledColors[self.currLedColor])
-        self.points = game.play()
-        self.gameOverSignal.emit()
+        self.game.newGame(selectedLevel, self.difficultyLevels[self.currDifficulty], self.ledColors[self.currLedColor])
+        self.points = self.game.play()
+        self.gameOver(selectedLevel)
 
-    def gameOver(self):
+    def gameOver(self, selectedLevel: str):
         self.loadScreen(f'{UI_FOLDER_PATH}/{UI_GAMEOVER}')
         self.screen.pointsLabel.setText(f'{self.points}')
-        self.screen.gameTitleLabel.setText(f'{self.currLevel}')
+        self.screen.gameTitleLabel.setText(f'{selectedLevel}')
 
         self.screen.cancelButton.clicked.connect(self.mainMenu)
         self.screen.saveButton.clicked.connect(
-            lambda: self.saveResults(self.points, self.currLevel, self.screen.nameField.text())
+            lambda: self.saveResults(self.points, selectedLevel, self.screen.nameField.text())
         )
         self.window.show()
 

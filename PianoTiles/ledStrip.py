@@ -8,7 +8,7 @@ NOTES_FOLDER = 'PianoTiles/sounds'
 class LedStrip(object):
     def __init__(self, ledNumTop: int, ledCount: int, direction: int, note: str, color: str, pin: int):
         self.ledNumTop       = ledNumTop
-        self.ledNumBottom    = ledNumTop + (ledCount * direction)
+        self.ledNumBottom    = ledNumTop + ((ledCount - 1) * direction)
         self.direction       = direction
         self.note            = pg.mixer.Sound(f'{NOTES_FOLDER}/{note}.wav')
         self.noteName        = note
@@ -34,7 +34,7 @@ class LedStrip(object):
         self.ledNumsColor = ledNumsColor
 
     def playSound(self) -> None:
-        if self.ledNumBottom in self.ledNumsColor:
+        if self.ledNumBottom in self.ledNumsColor and not self.soundPlayed:
             self.note.play()
             self.soundPlayed = True
             time.sleep(0.25)

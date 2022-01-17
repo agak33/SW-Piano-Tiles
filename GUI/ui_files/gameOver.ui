@@ -22,6 +22,11 @@
     <height>700</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <family>Showcard Gothic</family>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -36,6 +41,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Showcard Gothic</family>
      <pointsize>16</pointsize>
     </font>
    </property>
@@ -54,6 +60,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Showcard Gothic</family>
      <pointsize>16</pointsize>
     </font>
    </property>
@@ -72,6 +79,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Showcard Gothic</family>
      <pointsize>14</pointsize>
     </font>
    </property>
@@ -87,6 +95,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Showcard Gothic</family>
      <pointsize>26</pointsize>
     </font>
    </property>
@@ -108,6 +117,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Showcard Gothic</family>
      <pointsize>14</pointsize>
     </font>
    </property>
@@ -129,6 +139,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Showcard Gothic</family>
      <pointsize>14</pointsize>
     </font>
    </property>
@@ -147,6 +158,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Showcard Gothic</family>
      <pointsize>14</pointsize>
     </font>
    </property>
@@ -168,6 +180,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Showcard Gothic</family>
      <pointsize>14</pointsize>
     </font>
    </property>
@@ -189,6 +202,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Showcard Gothic</family>
      <pointsize>14</pointsize>
     </font>
    </property>
